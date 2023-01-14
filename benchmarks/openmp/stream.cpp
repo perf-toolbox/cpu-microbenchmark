@@ -2,17 +2,18 @@
 #include "cpu-microbenchmark/utils.hpp"
 
 #include <vector>
-#include <cstring>
+#include <omp.h>
 
 template <typename T>
-void streamCopy(Allocator &alloc, Timer &timer) {
-    T *a = alloc.allocate<T>(1'000'000'000);
-    T *b = alloc.allocate<T>(1'000'000'000);
+static void streamCopy(Allocator &alloc, Timer &timer) {
+    constexpr size_t size = 1'000'000'000;
+    T *a = alloc.allocate<T>(size);
+    T *b = alloc.allocate<T>(size);
 
-    alloc.random_fill(a, 1'000'000'000);
+    alloc.random_fill(a, size);
 
     timer.start();
-#pragma omp parallel for
+#pragma omp parallel for simd
     for (size_t i = 0; i < 1'000'000'000; i++) {
         b[i] = a[i];
 
@@ -25,7 +26,7 @@ void streamCopy(Allocator &alloc, Timer &timer) {
 }
 
 template <typename T>
-void streamScale(Allocator &alloc, Timer &timer) {
+static void streamScale(Allocator &alloc, Timer &timer) {
     constexpr size_t size = 1'000'000'000;
     T *a = alloc.allocate<T>(size);
     T *b = alloc.allocate<T>(size);
@@ -48,7 +49,7 @@ void streamScale(Allocator &alloc, Timer &timer) {
 }
 
 template <typename T>
-void streamAdd(Allocator &alloc, Timer &timer) {
+static void streamAdd(Allocator &alloc, Timer &timer) {
     constexpr size_t size = 1'000'000'000;
     T *a = alloc.allocate<T>(size);
     T *b = alloc.allocate<T>(size);
@@ -72,7 +73,7 @@ void streamAdd(Allocator &alloc, Timer &timer) {
 }
 
 template <typename T>
-void streamTriad(Allocator &alloc, Timer &timer) {
+static void streamTriad(Allocator &alloc, Timer &timer) {
     constexpr size_t size = 1'000'000'000;
     T *a = alloc.allocate<T>(size);
     T *b = alloc.allocate<T>(size);
@@ -96,7 +97,8 @@ void streamTriad(Allocator &alloc, Timer &timer) {
     alloc.free(b);
     alloc.free(c);
 }
-void createStream(std::vector<std::unique_ptr<Benchmark>> &container) {
+
+void createStreamOMP(std::vector<std::unique_ptr<Benchmark>> &container) {
     container.push_back(std::move(std::make_unique<OpenMPBenchmark>("stream_copy_float", streamCopy<float>)));
     container.push_back(std::move(std::make_unique<OpenMPBenchmark>("stream_copy_double", streamCopy<double>)));
     container.push_back(std::move(std::make_unique<OpenMPBenchmark>("stream_scale_float", streamScale<float>)));
