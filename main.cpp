@@ -21,6 +21,7 @@ int main() {
     std::vector<std::unique_ptr<Benchmark>> allBenchmarks;
 
     registerSingleThreadBenchmarks(allBenchmarks);
+    registerOpenMPBenchmarks(allBenchmarks);
 
     runAllBenchmarks(allBenchmarks);
 

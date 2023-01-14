@@ -11,4 +11,5 @@ target_include_directories(cpu_microbenchmark PRIVATE include)
 
 target_link_libraries(cpu_microbenchmark PRIVATE
     single_thread
+    openmp
 )

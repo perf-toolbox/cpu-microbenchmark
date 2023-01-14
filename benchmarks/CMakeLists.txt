@@ -1,1 +1,2 @@
 add_subdirectory(single_thread)
+add_subdirectory(openmp)
