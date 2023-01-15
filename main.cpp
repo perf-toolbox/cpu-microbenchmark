@@ -20,7 +20,7 @@ void runAllBenchmarks(std::vector<std::unique_ptr<Benchmark>> &allBenchmarks) {
 int main() {
     std::vector<std::unique_ptr<Benchmark>> allBenchmarks;
 
-    registerSingleThreadBenchmarks(allBenchmarks);
+    // registerSingleThreadBenchmarks(allBenchmarks);
     registerOpenMPBenchmarks(allBenchmarks);
 
     runAllBenchmarks(allBenchmarks);

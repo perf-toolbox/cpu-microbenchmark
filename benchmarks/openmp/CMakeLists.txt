@@ -16,7 +16,7 @@ endif()
 
 if (NOT APPLE)
     find_package(OpenMP REQUIRED)
-    target_link_libraries(openmp PRIVATE ${OpenMP_C_LIBRARY})
+    target_link_libraries(openmp PRIVATE OpenMP::OpenMP_CXX)
 else()
     find_library(OMP_LIB omp HINTS
         "/opt/homebrew/opt/libomp/lib"
