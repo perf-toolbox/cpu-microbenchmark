@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstdlib>
+#include <cstddef>
+#include <type_traits>
 #include <random>
 
 class Allocator {

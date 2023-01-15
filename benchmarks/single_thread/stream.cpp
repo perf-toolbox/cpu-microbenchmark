@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cstring>
+#include <memory>
 
 template <typename T>
 void streamCopy(Allocator &alloc, Timer &timer) {

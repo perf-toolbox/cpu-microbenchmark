@@ -2,7 +2,7 @@
 #include "cpu-microbenchmark/utils.hpp"
 
 #include <vector>
-#include <omp.h>
+#include <memory>
 
 template <typename T>
 static void streamCopy(Allocator &alloc, Timer &timer) {
