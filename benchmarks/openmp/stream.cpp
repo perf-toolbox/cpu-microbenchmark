@@ -5,6 +5,26 @@
 #include <memory>
 
 template <typename T>
+static void streamCopyOpt(Allocator &alloc, Timer &timer) {
+  constexpr size_t size = 1'000'000'000;
+  T *a = alloc.allocate<T>(size);
+  T *b = alloc.allocate<T>(size);
+
+  alloc.random_fill(a, size);
+
+  timer.start();
+#pragma omp parallel for
+  for (size_t i = 0; i < 10; i++) {
+    memcpy_opt(b + 100'000'000 * i, a + 100'000'000 * i, 100'000'000);
+  }
+  timer.end();
+  preserve(b);
+
+  alloc.free(a);
+  alloc.free(b);
+}
+
+template <typename T>
 static void streamCopy(Allocator &alloc, Timer &timer) {
     constexpr size_t size = 1'000'000'000;
     T *a = alloc.allocate<T>(size);
@@ -99,6 +119,8 @@ static void streamTriad(Allocator &alloc, Timer &timer) {
 }
 
 void createStreamOMP(std::vector<std::unique_ptr<Benchmark>> &container) {
+    container.push_back(std::move(std::make_unique<OpenMPBenchmark>(
+        "stream_copy_opt_float", streamCopyOpt<float>)));
     container.push_back(std::move(std::make_unique<OpenMPBenchmark>("stream_copy_float", streamCopy<float>)));
     container.push_back(std::move(std::make_unique<OpenMPBenchmark>("stream_copy_double", streamCopy<double>)));
     container.push_back(std::move(std::make_unique<OpenMPBenchmark>("stream_scale_float", streamScale<float>)));
