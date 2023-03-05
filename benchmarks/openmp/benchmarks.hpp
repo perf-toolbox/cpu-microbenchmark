@@ -6,3 +6,4 @@
 #include <vector>
 
 void createStreamOMP(std::vector<std::unique_ptr<Benchmark>> &container);
+void createBS(std::vector<std::unique_ptr<Benchmark>> &container);

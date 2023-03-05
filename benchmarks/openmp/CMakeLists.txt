@@ -1,6 +1,7 @@
 add_library(openmp STATIC
     register_benchmarks.cpp
     stream.cpp
+    blacksholes.cpp
 )
 
 target_include_directories(openmp PRIVATE
